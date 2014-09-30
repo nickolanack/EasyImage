@@ -1,11 +1,18 @@
 <?php
 
 /**
+ * Requires php 5.4+ 
  * 
- * @author nblackwe
- *
+ * Easy image is an image proccessing library intended to provide some simple image 
+ * conversions, abstracting the image file type.
+ * 
+ * 
+ * @author Nick Blackwell https://people.ok.ubc.ca/nblackwe
+ * @tutorial
+ * 
  */
-
+ 
+ 
 class ImageTool{
 
 	private static $exception='';
