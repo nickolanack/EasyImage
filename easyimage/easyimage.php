@@ -4,20 +4,19 @@
  * Requires php 5.4+ 
  * 
  * Easy image is an image proccessing library intended to provide some simple image 
- * conversions, abstracting the image file type.
+ * conversions, abstracting the image file type. 
  * 
  * 
  * @author Nick Blackwell https://people.ok.ubc.ca/nblackwe
- * @tutorial
  * 
  */
  
  
-class ImageTool{
+class EasyImage{
 
 	private static $exception='';
 	public static function LastError(){
-		return ImageTool::$exception;
+		return EasyImage::$exception;
 	}
 	public static function Open($path){
 		
@@ -88,11 +87,11 @@ class ImageTool{
 					return $createfrombmp($path);
 			}
 			
-			ImageTool::$exception="Invalid Image Type [jpeg, jpg, png, gif, bmp], ".$path;
+			EasyImage::$exception="Invalid Image Type [jpeg, jpg, png, gif, bmp], ".$path;
 			return false;
 		
 		}else{
-			ImageTool::$exception="File Not Found, ".$path;
+			EasyImage::$exception="File Not Found, ".$path;
 			return false;
 		}
 		
@@ -105,9 +104,9 @@ class ImageTool{
 	}
 	
 	public static function ColorProfile($image){
-		$simplified=ImageTool::Thumbnail($image, 10);
+		$simplified=EasyImage::Thumbnail($image, 10);
 		//imagetruecolortopalette($simplified, false, 5);
-		$s=ImageTool::GetSize($simplified);
+		$s=EasyImage::GetSize($simplified);
 		$values=array();
 		for($x=0;$x<$s['w'];$x++){	
 			for($y=0;$y<$s['h'];$y++){
