@@ -6,6 +6,8 @@
  * Easy image is an image proccessing library intended to provide some simple image 
  * conversions, abstracting the image file type. 
  * 
+ * This class contains static methods.
+ * 
  * 
  * @author Nick Blackwell https://people.ok.ubc.ca/nblackwe
  * 
@@ -195,18 +197,21 @@ class EasyImage{
 	}
 	
 	/**
+	 * overlays two images ($img1 on top of $img2 at [$xOffset, $yOffset]) 
+	 * 
+	 * 
 	 * TODO: make use of this method. and test.
-	 * @param image resource $top
-	 * @param image resource $bottom
-	 * @param unknown_type $x
-	 * @param unknown_type $y
+	 * @param resource $img1 a GD image resource
+	 * @param resource $img2 a GD image resource
+	 * @param int $xOffset
+	 * @param int $yOffset
 	 */
-	public static function Overlay($top, $bottom, $x, $y=false){
-		if($y===false)$y=$x;
-		imagealphablending($top,true);
-		imagealphablending($bottom,true);
-		imagecopy($bottom, $top, $x, $y, 0, 0, imagesx($bottom),imagesy($bottom));
-		return $bottom;
+	public static function Overlay($img1, $img2, $xOffset, $yOffset=false){
+		if($yOffset===false)$yOffset=$xOffset;
+		imagealphablending($img1,true);
+		imagealphablending(img2,true);
+		imagecopy(img2, $img1, $xOffset, $yOffset, 0, 0, imagesx(img2),imagesy(img2));
+		return img2;
 	}
 	
 	public static function Save($image, $path){
