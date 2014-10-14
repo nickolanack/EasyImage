@@ -106,7 +106,7 @@ class EasyImage{
 	}
 	
 	public static function ColorProfile($image){
-		$simplified=EasyImage::Thumbnail($image, 10);
+		$simplified=EasyImage::ThumbnailFit($image, 10);
 		//imagetruecolortopalette($simplified, false, 5);
 		$s=EasyImage::GetSize($simplified);
 		$values=array();
@@ -145,7 +145,49 @@ class EasyImage{
 	public static function FilterBrightness($image, $amount){
 		imagefilter($image, IMG_FILTER_BRIGHTNESS, $amount);
 	}
-	public static function Thumbnail($image, $x, $y=false, $scale=true){
+	
+	
+	public static function ThumbnailFill($image, $x, $y=false, $scale=true){
+	
+		if(!$y)$y=$x;
+	
+	
+	
+		$width=imagesx($image);
+		$height=imagesy($image);
+	
+		$outW=$width;
+		$outY=$height;
+	
+	
+	
+	
+		if($scale){
+	
+			if($x<$outW){
+				$outY=$height*($x/$width);
+				$outW=$x;
+			}
+			if($y<$outY){
+				$outW=$width*($y/$height);
+				$outY=$y;
+			}
+		}else{
+			$outW=$x;
+			$outY=$y;
+		}
+	
+	
+	
+		$out=imagecreatetruecolor($outW,$outY);
+		imagefill($out,0,0,imagecolortransparent($out,imagecolorallocate($out,0,0,0)));
+		imagesavealpha($out, true);
+		imagealphablending($out,false);
+		imagecopyresampled($out,$image,0,0,0,0,$outW,$outY,$width ,$height);
+		return $out;
+	}
+	
+	public static function ThumbnailFit($image, $x, $y=false, $scale=true){
 
 		if(!$y)$y=$x;
 		
@@ -190,10 +232,13 @@ class EasyImage{
 	/**
 	 * 
 	 * @param unknown $image
-	 * @return array with (x,y) keys
+	 * @return array with (w,h) keys
 	 */
 	public static function GetSize($image){
-		return array('w'=>imagesx($image), 'h'=>imagesy($image));
+		$x=imagesx($image);
+		$y=imagesy($image);
+		
+		return array('w'=>$x, 'h'=>$y);
 	}
 	
 	/**
