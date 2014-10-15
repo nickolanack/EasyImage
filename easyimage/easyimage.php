@@ -147,46 +147,25 @@ class EasyImage{
 	}
 	
 	
+	/**
+	 * TODO: similar to ThumbnailFit, but will crop to size maintaining aspect ratio
+	 */
 	public static function ThumbnailFill($image, $x, $y=false, $scale=true){
 	
-		if(!$y)$y=$x;
+		throw new Exception('Not implemented.');
 	
-	
-	
-		$width=imagesx($image);
-		$height=imagesy($image);
-	
-		$outW=$width;
-		$outY=$height;
-	
-	
-	
-	
-		if($scale){
-	
-			if($x<$outW){
-				$outY=$height*($x/$width);
-				$outW=$x;
-			}
-			if($y<$outY){
-				$outW=$width*($y/$height);
-				$outY=$y;
-			}
-		}else{
-			$outW=$x;
-			$outY=$y;
-		}
-	
-	
-	
-		$out=imagecreatetruecolor($outW,$outY);
-		imagefill($out,0,0,imagecolortransparent($out,imagecolorallocate($out,0,0,0)));
-		imagesavealpha($out, true);
-		imagealphablending($out,false);
-		imagecopyresampled($out,$image,0,0,0,0,$outW,$outY,$width ,$height);
-		return $out;
 	}
 	
+	
+	/**
+	 * scales an image, given a image resource $image so that it fits entirely within $x, $y (width, height) and
+	 * maintains aspect ratio
+	 * @param resource $image
+	 * @param int $x width
+	 * @param int $y height (or null for $x=$y)
+	 * @param boolean $scale ignore this arg
+	 * @return resource a new image resource. call EasyImage::Close($oldResource) if done with the previous
+	 */
 	public static function ThumbnailFit($image, $x, $y=false, $scale=true){
 
 		if(!$y)$y=$x;
