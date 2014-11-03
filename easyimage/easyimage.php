@@ -105,6 +105,69 @@ class EasyImage{
 		
 	}
 	
+	private static function _rgbParse($rgb){
+		return $rgb;
+	}
+	
+	/**
+	 * 
+	 * @param array $rgb array(0,0,0) = black...
+	 * @param number $threshhold
+	 * @return boolean if every pixel is aproximately equal to $rgb this method scales the image so 
+	 * that pixels may be blended before compared
+	 * 
+	 */
+	public static function IsAllColor($image, $rgb, $threshhold=0){
+		$simplified=EasyImage::ThumbnailFit($image, 10);
+		//imagetruecolortopalette($simplified, false, 5);
+		$s=EasyImage::GetSize($simplified);
+	
+		$rgb=EasyImage::_rgbParse($rgb);
+		
+		
+		for($x=0;$x<$s['w'];$x++){
+			for($y=0;$y<$s['h'];$y++){
+				$rgb=imagecolorat($simplified, $x, $y);
+				$r = ($rgb >> 16) & 0xFF;
+				$g = ($rgb >> 8) & 0xFF;
+				$b = $rgb & 0xFF;
+				
+				if(abs($r-$rgb[0])>$threshhold)return false;
+				if(abs($g-$rgb[1])>$threshhold)return false;
+				if(abs($b-$rgb[2])>$threshhold)return false;
+			}
+		}
+		return true;
+		
+	}
+	
+	
+	public static function IsAllOneColor($image, $threshhold=0){
+		$simplified=EasyImage::ThumbnailFit($image, 10);
+		//imagetruecolortopalette($simplified, false, 5);
+		$s=EasyImage::GetSize($simplified);
+		for($x=0;$x<$s['w'];$x++){
+			for($y=0;$y<$s['h'];$y++){
+				
+				
+				$rgb=imagecolorat($simplified, $x, $y);
+				$r = ($rgb >> 16) & 0xFF;
+				$g = ($rgb >> 8) & 0xFF;
+				$b = $rgb & 0xFF;
+				if(!$rgb){
+					$rgb=array($r,$g,$b);
+				}
+	
+				if(abs($r-$rgb[0])>$threshhold)return false;
+				if(abs($g-$rgb[1])>$threshhold)return false;
+				if(abs($b-$rgb[2])>$threshhold)return false;
+			}
+		}
+		return true;
+	
+	}
+	
+	
 	public static function ColorProfile($image){
 		$simplified=EasyImage::ThumbnailFit($image, 10);
 		//imagetruecolortopalette($simplified, false, 5);
