@@ -383,7 +383,7 @@ class EasyImage{
 		$start=$end-$span;
 		$step=$span/$s['h'];
 		
-		for($y=0;y<$s['h'];$y++){
+		for($y=0;$y<$s['h'];$y++){
 			
 			$color=imagecolorallocatealpha($tinted, $rgb[0]*($start+($step*$y)), $rgb[1]*($start+($step*$y)), $rgb[2]*($start+($step*$y)), 127);
 			imagefilledrectangle($tintend, 0, $y, $s['w'], $y+1, $color);
