@@ -369,7 +369,7 @@ class EasyImage{
 		$s=EasyImage::GetSize($image);
 	
 		$tinted=imagecreatetruecolor($s['w'], $s['h']);
-		
+
 		$span=0.3; 
 		$end=1.15;
 		
@@ -382,14 +382,19 @@ class EasyImage{
 		
 		$start=$end-$span;
 		$step=$span/$s['h'];
-		
+		//header('Content-Type: text/html;');
+		imageAlphaBlending($tinted, false);
 		for($y=0;$y<$s['h'];$y++){
 			
-			$color=imagecolorallocatealpha($tinted, $rgb[0]*($start+($step*$y)), $rgb[1]*($start+($step*$y)), $rgb[2]*($start+($step*$y)), 127);
-			imagefilledrectangle($tinted, 0, $y, $s['w'], $y+1, $color);
+			$color=imagecolorallocatealpha($tinted, (int)$rgb[0]*($start+($step*$y)), (int)$rgb[1]*($start+($step*$y)), (int)$rgb[2]*($start+($step*$y)), 127);
+			if(!imageline($tinted, 0, $y, $s['w'], $y, $color)){
+				//echo 'failed';
+			}
 			
+			//print_r('(0, '.$y.', '.$s['w'].', '.($y+1).') '.$rgb[0]*($start+($step*$y)).' - '.$rgb[1]*($start+($step*$y)).' - '.$rgb[2]*($start+($step*$y))."<br/>");
 		};
-	
+		
+		//die();
 		for($x=0;$x<$s['w'];$x++){
 			for($y=0;$y<$s['h'];$y++){
 	
@@ -403,7 +408,7 @@ class EasyImage{
 		}
 	
 		//neccessary for transparency
-		imageAlphaBlending($tinted, true);
+		//imageAlphaBlending($tinted, true);
 		imageSaveAlpha($tinted, true);
 	
 	
