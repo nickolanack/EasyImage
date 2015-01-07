@@ -353,5 +353,62 @@ class EasyImage{
 		return $tinted;
 		
 	}
+	
+	
+	
+	/**
+	 * replaces all colors in an image with an $rgb that slightly transitions, conserving alpha 
+	 *
+	 * @param resource $image image resource eg: EasyImage::Open
+	 * @param array $rgb [int:red, int:green, int:blue] tint color
+	 * @return resource a new resource for the tinted image
+	 */
+	public static function TintFade($image, $rgb){
+	
+	
+		$s=EasyImage::GetSize($image);
+	
+		$tinted=imagecreatetruecolor($s['w'], $s['h']);
+		
+		$span=0.3; 
+		$end=1.15;
+		
+		//adjust fade start end colors to within 255 limit
+		foreach($rgb as $c){
+			if($c*$end>255){
+			$end=255.0/c;
+			}
+		}
+		
+		$start=$end-$span;
+		$step=$span/$s['h'];
+		
+		for($y=0;y<$s['h'];$y++){
+			
+			$color=imagecolorallocatealpha($tinted, $rgb[0]*($start+($step*$y)), $rgb[1]*($start+($step*$y)), $rgb[2]*($start+($step*$y)), 127);
+			imagefilledrectangle($tintend, 0, $y, $s['w'], $y+1, $color);
+			
+		};
+	
+		for($x=0;$x<$s['w'];$x++){
+			for($y=0;$y<$s['h'];$y++){
+	
+					
+				$a=imagecolorsforindex($image, imagecolorat($image, $x, $y));
+				$t=imagecolorsforindex($tinted, imagecolorat($tinted, $x, $y));
+					
+				imagesetpixel($tinted, $x, $y, imagecolorallocatealpha($tinted, $t['red'], $t['green'], $t['blue'], $a['alpha']));
+	
+			}
+		}
+	
+		//neccessary for transparency
+		imageAlphaBlending($tinted, true);
+		imageSaveAlpha($tinted, true);
+	
+	
+		return $tinted;
+	
+	}
 
 }
