@@ -312,9 +312,55 @@ class EasyImage{
 				case 'gif':return imagegif($image, $path);
 			}
 		}
+	}
+	
+	
+	
+	/**
+	 * replaces all colors in an image with $rgb, conserving alpha
+	 * 
+	 * @param resource $image image resource eg: EasyImage::Open
+	 * @param array $rgb [int:red, int:green, int:blue] tint color
+	 * @return resource a new resource for the tinted image
+	 */
+	public static function Tint($image, $rgb){
 		
 		
+		$s=EasyImage::GetSize($image);
 		
+		$tinted=imagecreatetruecolor($s['w'], $s['h']);
+		$color=imagecolorallocatealpha($tinted, $rgb[0], $rgb[1], $rgb[2], 127);
+		
+		imagefill($tinted, 0, 0, $color);
+		
+		//imagesavealpha($image, true);
+		//$tinted=EasyImage::Open($file);
+		//imagesavealpha($tinted, true);
+		
+		
+		//imagefilter($tinted, IMG_FILTER_CONTRAST, $contrast);
+		//imagefilter($tinted, IMG_FILTER_BRIGHTNESS, $brightness);
+		//imagefilter($tinted, IMG_FILTER_SMOOTH, $smoothness);
+		//imagefilter($tinted, IMG_FILTER_COLORIZE, $rgb[0], $rgb[1], $rgb[2]);
+		
+		//$s=EasyImage::GetSize($image);
+		for($x=0;$x<$s['w'];$x++){
+			for($y=0;$y<$s['h'];$y++){
+		
+					
+				$a=imagecolorsforindex($image, imagecolorat($image, $x, $y));
+				$t=imagecolorsforindex($tinted, imagecolorat($tinted, $x, $y));
+					
+				imagesetpixel($tinted, $x, $y, imagecolorallocatealpha($tinted, $t['red'], $t['green'], $t['blue'], $a['alpha']));
+				//echo print_r(array($x, $y, $a, $t), true).'<br/>';
+			}
+		}
+		
+		imageAlphaBlending($tinted, true);
+		imageSaveAlpha($tinted, true);
+		
+		
+		return $tinted;
 		
 	}
 
