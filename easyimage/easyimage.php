@@ -301,6 +301,12 @@ class EasyImage{
 		return img2;
 	}
 	
+	/**
+	 * writes image resource to file. 
+	 * @param resource $image
+	 * @param string $path file type will be detected from file extension
+	 * @return boolean true on success.
+	 */
 	public static function Save($image, $path){
 		$ext_ex=explode('.', $path);
 		$ext=strtolower(array_pop($ext_ex));
