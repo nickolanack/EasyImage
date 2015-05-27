@@ -1,0 +1,1 @@
+[![Build Status](https://travis-ci.org/nickolanack/EasyImage.svg?branch=master)](https://travis-ci.org/nickolanack/EasyImage)
