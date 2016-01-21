@@ -1,0 +1,13 @@
+{
+    "name": "nickolanack/easyimage",
+    "description": "simple image processing tool",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nick Blackwell",
+            "email": "nickblackwell82@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
