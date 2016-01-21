@@ -31,48 +31,53 @@ class EasyImage {
                     case 'gif':
                         return imagecreatefromgif($path);
                     case 'bmp':
-                        $createfrombmp = function ($filename) {
+                        $createfrombmp = function ($p_sFile) {
                             
                             /*
-                             * this needs to be rewritten
+                             * http://php.net/manual/en/function.imagecreatefromwbmp.php#86214
                              */
                             
-                            $file = fopen($filename, "rb");
-                            $read = fread($file, 10);
-                            while (! feof($file) && $read != "") {
-                                $read .= fread($file, 1024);
+                           $file    =    fopen($p_sFile,"rb");
+                            $read    =    fread($file,10);
+                            while(!feof($file)&&($read<>""))
+                                $read    .=    fread($file,1024);
+                            $temp    =    unpack("H*",$read);
+                            $hex    =    $temp[1];
+                            $header    =    substr($hex,0,108);
+                            if (substr($header,0,4)=="424d")
+                            {
+                                $header_parts    =    str_split($header,2);
+                                $width            =    hexdec($header_parts[19].$header_parts[18]);
+                                $height            =    hexdec($header_parts[23].$header_parts[22]);
+                                unset($header_parts);
                             }
-                            $temp = unpack("H*", $read);
-                            $hex = $temp[1];
-                            $header = substr($hex, 0, 104);
-                            $body = str_split(substr($hex, 108), 6);
-                            if (substr($header, 0, 4) == "424d") {
-                                $header = substr($header, 4);
-                                // Remove some stuff?
-                                $header = substr($header, 32);
-                                // Get the width
-                                $width = hexdec(substr($header, 0, 2));
-                                // Remove some stuff?
-                                $header = substr($header, 8);
-                                // Get the height
-                                $height = hexdec(substr($header, 0, 2));
-                                unset($header);
-                            }
-                            $x = 0;
-                            $y = 1;
-                            $image = imagecreatetruecolor($width, $height);
-                            foreach ($body as $rgb) {
-                                $r = hexdec(substr($rgb, 4, 2));
-                                $g = hexdec(substr($rgb, 2, 2));
-                                $b = hexdec(substr($rgb, 0, 2));
-                                $color = imagecolorallocate($image, $r, $g, $b);
-                                imagesetpixel($image, $x, $height - $y, $color);
-                                $x ++;
-                                if ($x >= $width) {
-                                    $x = 0;
-                                    $y ++;
+                            $x                =    0;
+                            $y                =    1;
+                            $image            =    imagecreatetruecolor($width,$height);
+                            $body            =    substr($hex,108);
+                            $body_size        =    (strlen($body)/2);
+                            $header_size    =    ($width*$height);
+                            $usePadding        =    ($body_size>($header_size*3)+4);
+                            for ($i=0;$i<$body_size;$i+=3)
+                            {
+                                if ($x>=$width)
+                                {
+                                    if ($usePadding)
+                                        $i    +=    $width%4;
+                                    $x    =    0;
+                                    $y++;
+                                    if ($y>$height)
+                                        break;
                                 }
+                                $i_pos    =    $i*2;
+                                $r        =    hexdec($body[$i_pos+4].$body[$i_pos+5]);
+                                $g        =    hexdec($body[$i_pos+2].$body[$i_pos+3]);
+                                $b        =    hexdec($body[$i_pos].$body[$i_pos+1]);
+                                $color    =    imagecolorallocate($image,$r,$g,$b);
+                                imagesetpixel($image,$x,$height-$y,$color);
+                                $x++;
                             }
+                            unset($body);
                             return $image;
                         };
                         
