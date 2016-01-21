@@ -22,7 +22,7 @@ class SharesTest extends PHPUnit_Framework_TestCase {
 
 
 
-    	$this->fail(print_r(getimagesize(__DIR__.'/[G]_[ImAgE]_WBq_ptd_45j.bmp'),true));
+    	//$this->fail(print_r(getimagesize(__DIR__.'/[G]_[ImAgE]_WBq_ptd_45j.bmp'),true)); //this does get the right dimensions
 
     	include_once dirname(__DIR__).'/easyimage.php';
     	$i=EasyImage::Open(__DIR__.'/[G]_[ImAgE]_WBq_ptd_45j.bmp');
