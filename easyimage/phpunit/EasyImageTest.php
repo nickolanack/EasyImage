@@ -10,8 +10,8 @@ class SharesTest extends PHPUnit_Framework_TestCase {
     public function testEnvironment() {
 
     	$this->assertTrue(function_exists('gd_info'));
-    	
-    	$this->fail(print_r(gd_info(),true));
+
+    	//$this->fail(print_r(gd_info(),true));
 	}
 
 
@@ -22,7 +22,7 @@ class SharesTest extends PHPUnit_Framework_TestCase {
 
 
 
-
+    	$this->fail(print_r(getimagesize(__DIR__.'/[G]_[ImAgE]_WBq_ptd_45j.bmp'),true));
 
     	include_once dirname(__DIR__).'/easyimage.php';
     	$i=EasyImage::Open(__DIR__.'/[G]_[ImAgE]_WBq_ptd_45j.bmp');
